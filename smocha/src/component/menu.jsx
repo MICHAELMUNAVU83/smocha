@@ -53,42 +53,42 @@ function Menu() {
     ];
 
     return (
-        <main className="container mx-auto py-10 px-4 space-y-6">
-            {menuData.map((item, index) => (
-                <div
-                    key={index}
-                    className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row"
-                >
-                    {/* Image Section */}
-                    <div className="md:w-1/3">
+
+        <main className="max-w-7xl mx-auto py-10 px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {menuData.map((item, index) => (
+                    <div
+                        key={index}
+                        className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col"
+                    >
+                        {/* Image on top */}
                         <img
                             src={item.image}
                             alt={item.name}
-                            className="object-cover w-full h-full"
+                            className="object-cover w-full aspect-[1/1]" // maintains 1:1 ratio responsively
                         />
-                    </div>
 
-                    {/* Text Section */}
-                    <div className="md:w-2/3 p-6 flex flex-col justify-between">
-                        <div>
-                            <h2 className="text-2xl font-bold text-[#4c1f13] mb-1">
-                                {item.name}
-                            </h2>
-                            <p className="text-yellow-800 font-medium mb-2">{item.brief}</p>
-                            <p className="text-gray-600">{item.description}</p>
+                        {/* Text below */}
+                        <div className="p-6 flex flex-col justify-between h-full">
+                            <div>
+                                <h2 className="text-2xl font-bold text-[#4c1f13] mb-1">
+                                    {item.name}
+                                </h2>
+                                <p className="text-yellow-800 font-medium mb-2">{item.brief}</p>
+                                <p className="text-gray-600">{item.description}</p>
+                            </div>
+                            <div className="mt-4">
+                                <a
+                                    href={`/paymentinfo/${item.name.toLowerCase()}`}
+                                    className="inline-block bg-yellow-500 text-yellow-900 px-4 py-1 rounded-full font-bold hover:bg-yellow-600 transition"
+                                >
+                                    KES {item.price}
+                                </a>
+                            </div>
                         </div>
-                        <div className="mt-4">
-                            <a
-                                href={`/paymentinfo/${item.name.toLowerCase()}`}
-                                className="inline-block bg-yellow-500 text-yellow-900 px-4 py-1 rounded-full font-bold hover:bg-yellow-600 transition"
-                            >
-                                KES {item.price} 
-                            </a>
-                        </div>
-
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </main>
     );
 }
