@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Menu() {
     const [selectedItem, setSelectedItem] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [selectedSauces, setSelectedSauces] = useState([]);
+    const [selectedAdditives, setSelectedAdditives] = useState([]);
+    const navigate = useNavigate();
+    const [cartItems, setCartItems] = useState([]);
+
+
+
 
     const menuData = [
         {
@@ -57,11 +64,74 @@ function Menu() {
     ];
 
     const sauceOptions = [
-        { name: 'Ketchup', image: '/images/sauces/ketchup.jpeg' },
+        { name: 'Tomato', image: '/images/sauces/ketchup.jpeg' },
         { name: 'Chili', image: '/images/sauces/chili.jpg' },
         { name: 'Choma', image: '/images/sauces/choma-sauce.png' },
 
     ];
+
+    const additiveOptions = ['Kachumbari', 'Pilipili', 'Salt'];
+
+    useEffect(() => {
+        const savedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        setCartItems(savedCartItems);
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems)); 
+    }, [cartItems]);
+
+
+    const handleAddToCart = () => {
+        const order = {
+            item: selectedItem,
+            quantity,
+            sauces: selectedSauces,
+            additives: selectedAdditives,
+            total: quantity * selectedItem.price
+        };
+
+        setCartItems((prev) => {
+            const updatedCart = [...prev, order];
+            localStorage.setItem('cartItems', JSON.stringify(updatedCart)); 
+            return updatedCart;
+        });
+    };
+
+    const handleGoToCheckout = () => {
+    
+        const order = {
+            item: selectedItem,
+            quantity,
+            sauces: selectedSauces,
+            additives: selectedAdditives,
+            total: quantity * selectedItem.price
+        };
+    
+    
+        navigate('/payment');
+    };
+    
+
+
+    const handleBuy = () => {
+        const order = {
+            item: selectedItem,
+            quantity,
+            sauces: selectedSauces,
+            additives: selectedAdditives,
+            total: quantity * selectedItem.price
+        };
+        navigate('/payment', );
+    };
+
+    const handleAdditiveToggle = (additive) => {
+        setSelectedAdditives((prev) =>
+            prev.includes(additive)
+                ? prev.filter((a) => a !== additive)
+                : [...prev, additive]
+        );
+    };
 
     const handleSauceToggle = (sauce) => {
         setSelectedSauces((prev) =>
@@ -139,8 +209,8 @@ function Menu() {
                                         key={sauce.name}
                                         onClick={() => handleSauceToggle(sauce.name)}
                                         className={`flex flex-col items-center justify-center border rounded-xl p-2 transition ${selectedSauces.includes(sauce.name)
-                                                ? 'bg-yellow-100 border-yellow-500'
-                                                : 'bg-white border-gray-300'
+                                            ? 'bg-yellow-100 border-yellow-500'
+                                            : 'bg-white border-gray-300'
                                             } hover:shadow-md`}
                                     >
                                         <img
@@ -149,11 +219,30 @@ function Menu() {
                                             className="w-14 h-14 object-contain mb-1"
                                         />
                                         <span className={`text-sm font-medium ${selectedSauces.includes(sauce.name)
-                                                ? 'text-yellow-900'
-                                                : 'text-gray-800'
+                                            ? 'text-yellow-900'
+                                            : 'text-gray-800'
                                             }`}>
                                             {sauce.name}
                                         </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Additives */}
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 text-[#4c1f13]">Choose Additives:</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {additiveOptions.map((additive) => (
+                                    <button
+                                        key={additive}
+                                        onClick={() => handleAdditiveToggle(additive)}
+                                        className={`px-3 py-1 rounded-full border ${selectedAdditives.includes(additive)
+                                            ? 'bg-yellow-300 text-yellow-900 font-semibold'
+                                            : 'bg-white text-gray-800'
+                                            } hover:border-yellow-500 transition`}
+                                    >
+                                        {additive}
                                     </button>
                                 ))}
                             </div>
@@ -182,9 +271,24 @@ function Menu() {
                         </div>
 
                         {/* Buy Button */}
-                        <button className="w-full bg-yellow-500 text-yellow-900 py-2 rounded-full font-bold hover:bg-yellow-600 transition">
-                            Buy Now
+                        {/* Add to Cart Button */}
+                        <button
+                            onClick={handleAddToCart}
+                            className="bg-yellow-500 text-yellow-900 py-2 px-4 rounded-full font-bold hover:bg-yellow-600 w-full mb-3"
+                        >
+                            Add to Cart
                         </button>
+
+                        {/* Go to Checkout */}
+                        <button
+                            onClick={handleGoToCheckout}
+                            className="bg-green-500 text-white py-2 px-4 rounded-full font-bold hover:bg-green-600 w-full"
+                        >
+                            Go to Checkout
+                        </button>
+
+
+
                     </div>
                 </div>
             )}

@@ -10,9 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paystack/inline-js": "^2.22.2",
     "@tailwindcss/vite": "^4.1.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "lucide-react": "^0.488.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.5.0",
     "tailwindcss": "^4.1.3"
   },
   "devDependencies": {

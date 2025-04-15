@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import './App.css'
 import Landing from './page/landing'
 
@@ -12,4 +12,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
